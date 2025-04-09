@@ -1,33 +1,7 @@
-========================================================================================================================================================
+===============================================================================
 == Test 5: Three-Element Pipeline
 == Runs a pipeline consisting of three programs.
 Running test...
 Expected output is in file 'test_results/raw/swish_shell_pipeline_tests-5-expected.tmp'
 Actual output is in file 'test_results/raw/swish_shell_pipeline_tests-5-actual.tmp'
-Test FAILED
-== Side-by-Side Comparison ==
-== Differing lines have a character like '|' '>' or '<' in the middle
-==== EXPECT ====                                                  ==== ACTUAL ====
-@> cat test_cases/resources/numbers.txt | sort -rn | tail -n 10   @> cat test_cases/resources/numbers.txt | sort -rn | tail -n 10
-44                                                              <
-38                                                              <
-36                                                              <
-34                                                              <
-26                                                              <
-7                                                               <
-7                                                               <
-7                                                               <
-3                                                               <
-3                                                               <
-@> exit                                                           @> exit
-== Line Differences ==
-EXPECT  2) 44
-EXPECT  3) 38
-EXPECT  4) 36
-EXPECT  5) 34
-EXPECT  6) 26
-EXPECT  7) 7
-EXPECT  8) 7
-EXPECT  9) 7
-EXPECT 10) 3
-EXPECT 11) 3
+Test PASSED
