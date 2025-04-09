@@ -1,0 +1,15 @@
+==75242== Memcheck, a memory error detector
+==75242== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==75242== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==75242== Command: ./par_letter_counts test_cases/resources/one_word.txt
+==75242== Parent PID: 75194
+==75242== 
+==75242== 
+==75242== HEAP SUMMARY:
+==75242==     in use at exit: 0 bytes in 0 blocks
+==75242==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==75242== 
+==75242== All heap blocks were freed -- no leaks are possible
+==75242== 
+==75242== For lists of detected and suppressed errors, rerun with: -s
+==75242== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

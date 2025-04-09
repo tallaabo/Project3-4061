@@ -1,0 +1,29 @@
+-- Display contents of redirection target to check its correctness
+Expected output is in file 'test_results/raw/swish_shell_pipeline_tests-7-2-expected.tmp'
+Actual output is in file 'test_results/raw/swish_shell_pipeline_tests-7-2-actual.tmp'
+Test FAILED
+== Side-by-Side Comparison ==
+== Differing lines have a character like '|' '>' or '<' in the middle
+==== EXPECT ====   ==== ACTUAL ====
+44               | cat: out.txt: No such file or directory
+38               <
+36               <
+34               <
+26               <
+7                <
+7                <
+7                <
+3                <
+3                <
+== Line Differences ==
+EXPECT  1) 44
+ACTUAL  1) cat: out.txt: No such file or directory
+EXPECT  2) 38
+EXPECT  3) 36
+EXPECT  4) 34
+EXPECT  5) 26
+EXPECT  6) 7
+EXPECT  7) 7
+EXPECT  8) 7
+EXPECT  9) 3
+EXPECT 10) 3

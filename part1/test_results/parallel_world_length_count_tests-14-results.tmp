@@ -1,0 +1,90 @@
+========================================================================================================================================================
+== Test 14: Several Large Input Files With Uppercase
+== Count letter occurrences in several large text files, now including both
+== uppercase and lowercase characters
+Running test...
+Expected output is in file 'test_results/raw/parallel_world_length_count_tests-14-expected.tmp'
+Actual output is in file 'test_results/raw/parallel_world_length_count_tests-14-actual.tmp'
+Test FAILED
+== Side-by-Side Comparison ==
+== Differing lines have a character like '|' '>' or '<' in the middle
+==== EXPECT ====   ==== ACTUAL ====
+a Count: 4989    | a Count: -1
+b Count: 5178    | b Count: -1
+c Count: 5028    | c Count: -1
+d Count: 5116    | d Count: -1
+e Count: 5177    | e Count: -1
+f Count: 5077    | f Count: -1
+g Count: 5121    | g Count: -1
+h Count: 5046    | h Count: -1
+i Count: 5193    | i Count: -1
+j Count: 5041    | j Count: -1
+k Count: 5087    | k Count: -1
+l Count: 5050    | l Count: -1
+m Count: 5097    | m Count: -1
+n Count: 5127    | n Count: -1
+o Count: 5010    | o Count: -1
+p Count: 5016    | p Count: -1
+q Count: 5208    | q Count: -1
+r Count: 5102    | r Count: -1
+s Count: 4907    | s Count: -1
+t Count: 5217    | t Count: -1
+u Count: 5137    | u Count: -1
+v Count: 5128    | v Count: -1
+w Count: 5109    | w Count: -1
+x Count: 5147    | x Count: -1
+y Count: 5132    | y Count: -1
+z Count: 5054    | z Count: -1
+== Line Differences ==
+EXPECT  1) a Count: 4989
+ACTUAL  1) a Count: -1
+EXPECT  2) b Count: 5178
+ACTUAL  2) b Count: -1
+EXPECT  3) c Count: 5028
+ACTUAL  3) c Count: -1
+EXPECT  4) d Count: 5116
+ACTUAL  4) d Count: -1
+EXPECT  5) e Count: 5177
+ACTUAL  5) e Count: -1
+EXPECT  6) f Count: 5077
+ACTUAL  6) f Count: -1
+EXPECT  7) g Count: 5121
+ACTUAL  7) g Count: -1
+EXPECT  8) h Count: 5046
+ACTUAL  8) h Count: -1
+EXPECT  9) i Count: 5193
+ACTUAL  9) i Count: -1
+EXPECT 10) j Count: 5041
+ACTUAL 10) j Count: -1
+EXPECT 11) k Count: 5087
+ACTUAL 11) k Count: -1
+EXPECT 12) l Count: 5050
+ACTUAL 12) l Count: -1
+EXPECT 13) m Count: 5097
+ACTUAL 13) m Count: -1
+EXPECT 14) n Count: 5127
+ACTUAL 14) n Count: -1
+EXPECT 15) o Count: 5010
+ACTUAL 15) o Count: -1
+EXPECT 16) p Count: 5016
+ACTUAL 16) p Count: -1
+EXPECT 17) q Count: 5208
+ACTUAL 17) q Count: -1
+EXPECT 18) r Count: 5102
+ACTUAL 18) r Count: -1
+EXPECT 19) s Count: 4907
+ACTUAL 19) s Count: -1
+EXPECT 20) t Count: 5217
+ACTUAL 20) t Count: -1
+EXPECT 21) u Count: 5137
+ACTUAL 21) u Count: -1
+EXPECT 22) v Count: 5128
+ACTUAL 22) v Count: -1
+EXPECT 23) w Count: 5109
+ACTUAL 23) w Count: -1
+EXPECT 24) x Count: 5147
+ACTUAL 24) x Count: -1
+EXPECT 25) y Count: 5132
+ACTUAL 25) y Count: -1
+EXPECT 26) z Count: 5054
+ACTUAL 26) z Count: -1

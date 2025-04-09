@@ -1,0 +1,90 @@
+========================================================================================================================================================
+== Test 9: One Multi-Line Input File
+== Count letter occurrences in a file with words on multiple lines, still all
+== lower case
+Running test...
+Expected output is in file 'test_results/raw/parallel_world_length_count_tests-09-expected.tmp'
+Actual output is in file 'test_results/raw/parallel_world_length_count_tests-09-actual.tmp'
+Test FAILED
+== Side-by-Side Comparison ==
+== Differing lines have a character like '|' '>' or '<' in the middle
+==== EXPECT ====   ==== ACTUAL ====
+a Count: 9       | a Count: -1
+b Count: 9       | b Count: -1
+c Count: 9       | c Count: -1
+d Count: 12      | d Count: -1
+e Count: 9       | e Count: -1
+f Count: 8       | f Count: -1
+g Count: 13      | g Count: -1
+h Count: 8       | h Count: -1
+i Count: 10      | i Count: -1
+j Count: 4       | j Count: -1
+k Count: 7       | k Count: -1
+l Count: 14      | l Count: -1
+m Count: 13      | m Count: -1
+n Count: 9       | n Count: -1
+o Count: 8       | o Count: -1
+p Count: 13      | p Count: -1
+q Count: 4       | q Count: -1
+r Count: 12      | r Count: -1
+s Count: 11      | s Count: -1
+t Count: 14      | t Count: -1
+u Count: 7       | u Count: -1
+v Count: 10      | v Count: -1
+w Count: 16      | w Count: -1
+x Count: 10      | x Count: -1
+y Count: 9       | y Count: -1
+z Count: 6       | z Count: -1
+== Line Differences ==
+EXPECT  1) a Count: 9
+ACTUAL  1) a Count: -1
+EXPECT  2) b Count: 9
+ACTUAL  2) b Count: -1
+EXPECT  3) c Count: 9
+ACTUAL  3) c Count: -1
+EXPECT  4) d Count: 12
+ACTUAL  4) d Count: -1
+EXPECT  5) e Count: 9
+ACTUAL  5) e Count: -1
+EXPECT  6) f Count: 8
+ACTUAL  6) f Count: -1
+EXPECT  7) g Count: 13
+ACTUAL  7) g Count: -1
+EXPECT  8) h Count: 8
+ACTUAL  8) h Count: -1
+EXPECT  9) i Count: 10
+ACTUAL  9) i Count: -1
+EXPECT 10) j Count: 4
+ACTUAL 10) j Count: -1
+EXPECT 11) k Count: 7
+ACTUAL 11) k Count: -1
+EXPECT 12) l Count: 14
+ACTUAL 12) l Count: -1
+EXPECT 13) m Count: 13
+ACTUAL 13) m Count: -1
+EXPECT 14) n Count: 9
+ACTUAL 14) n Count: -1
+EXPECT 15) o Count: 8
+ACTUAL 15) o Count: -1
+EXPECT 16) p Count: 13
+ACTUAL 16) p Count: -1
+EXPECT 17) q Count: 4
+ACTUAL 17) q Count: -1
+EXPECT 18) r Count: 12
+ACTUAL 18) r Count: -1
+EXPECT 19) s Count: 11
+ACTUAL 19) s Count: -1
+EXPECT 20) t Count: 14
+ACTUAL 20) t Count: -1
+EXPECT 21) u Count: 7
+ACTUAL 21) u Count: -1
+EXPECT 22) v Count: 10
+ACTUAL 22) v Count: -1
+EXPECT 23) w Count: 16
+ACTUAL 23) w Count: -1
+EXPECT 24) x Count: 10
+ACTUAL 24) x Count: -1
+EXPECT 25) y Count: 9
+ACTUAL 25) y Count: -1
+EXPECT 26) z Count: 6
+ACTUAL 26) z Count: -1

@@ -1,0 +1,16 @@
+========================================================================================================================================================
+== Test 1: Two-Element Pipeline
+== Runs a simple pipeline consisting of two commands where output of the first
+== command must be provided as input to second command
+Running test...
+Expected output is in file 'test_results/raw/swish_shell_pipeline_tests-1-expected.tmp'
+Actual output is in file 'test_results/raw/swish_shell_pipeline_tests-1-actual.tmp'
+Test FAILED
+== Side-by-Side Comparison ==
+== Differing lines have a character like '|' '>' or '<' in the middle
+==== EXPECT ====      ==== ACTUAL ====
+@> echo hello | cat   @> echo hello | cat
+hello               <
+@> exit               @> exit
+== Line Differences ==
+EXPECT 2) hello
