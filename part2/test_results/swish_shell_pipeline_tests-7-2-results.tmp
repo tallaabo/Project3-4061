@@ -1,4 +1,0 @@
--- Display contents of redirection target to check its correctness
-Expected output is in file 'test_results/raw/swish_shell_pipeline_tests-7-2-expected.tmp'
-Actual output is in file 'test_results/raw/swish_shell_pipeline_tests-7-2-actual.tmp'
-Test PASSED

@@ -6,7 +6,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <string.h>
 
 #include "string_vector.h"
 
@@ -27,7 +26,6 @@
  * Returns 0 on success or -1 on error.
  */
 int run_piped_command(strvec_t *tokens, int *pipes, int n_pipes, int in_idx, int out_idx) {
-    // TODO Complete this function's implementation
 
     //need to redirect standard input from pipe
     if (in_idx != -1) {
@@ -62,13 +60,11 @@ int run_piped_command(strvec_t *tokens, int *pipes, int n_pipes, int in_idx, int
 }
 
 int run_pipelined_commands(strvec_t *tokens) {
-    // TODO Complete this function's implementation
-    /* Count the number of "|" tokens to determine how many pipes and commands are needed */
+    // Counting the number of "|" tokens to see how many pipes & commands are needed
     int num_pipe_tokens = strvec_num_occurrences(tokens, "|");
     int num_cmds = num_pipe_tokens + 1;
 
-    /* Allocate an array for the pipe file descriptors.
-        Each pipe contributes two fds so total fd count is num_pipe_tokens * 2 */
+    // Allocating an array for the pipe file descriptors
     int total_pipe_fds = num_pipe_tokens * 2;
     int *pipefds = NULL;
     if (num_pipe_tokens > 0) {
@@ -77,7 +73,7 @@ int run_pipelined_commands(strvec_t *tokens) {
             perror("malloc for pipefds failed");
             return -1;
         }
-        /* Create all the required pipes */
+        // Creating pipes
         for (int i = 0; i < num_pipe_tokens; i++) {
             if (pipe(pipefds + i * 2) == -1) {
                 perror("pipe creation failed");
@@ -92,10 +88,7 @@ int run_pipelined_commands(strvec_t *tokens) {
         }
     }
 
-    /* Parse the tokens into separate commands (each command is a strvec_t)
-        We use the "|" token as a delimiter.
-        For example, for tokens: "cat", "file.txt", "|", "wc", "-l"
-        the first command will be tokens[0..1] and the second will be tokens[3..4]. */
+    // Parsing the tokens into separate commands (each command is a strvec_t)
     strvec_t *commands = malloc(sizeof(strvec_t) * num_cmds);
     if (commands == NULL) {
         perror("malloc for commands failed");
@@ -106,7 +99,7 @@ int run_pipelined_commands(strvec_t *tokens) {
     int cmd_index = 0;
     int start = 0;
     for (int i = 0; i < tokens->length; i++) {
-        if (strcmp(tokens->data[i], "|") == 0) {
+        if (tokens->data[i][0] == '|' && tokens->data[i][1] == '\0') {
             if (strvec_slice(tokens, &commands[cmd_index], start, i) == -1) {
                 perror("strvec_slice failed");
                 for (int k = 0; k < cmd_index; k++) {
@@ -120,7 +113,7 @@ int run_pipelined_commands(strvec_t *tokens) {
             start = i + 1;
         }
     }
-    /* Last command, from the last "|" to the end of tokens */
+    // Last command, from the last "|" to the end of tokens
     if (strvec_slice(tokens, &commands[cmd_index], start, tokens->length) == -1) {
         perror("strvec_slice failed");
         for (int k = 0; k < cmd_index; k++) {
@@ -131,16 +124,7 @@ int run_pipelined_commands(strvec_t *tokens) {
         return -1;
     }
 
-    /* Fork child processes for each command.
-        We launch the children in backwards order (last command first) for clarity.
-        For each command, we set:
-            - For the first command (i == 0): no piped input (in_idx = -1). If there is a successor,
-            its output is redirected to the write end of pipe 0: index = 1.
-            - For an interior command (0 < i < num_cmds - 1):
-                input comes from the previous pipe’s read end: index = (i-1) * 2,
-                output goes to the current pipe’s write end: index = (i * 2) + 1.
-            - For the last command (i == num_cmds - 1): input comes from the previous pipe’s read end.
-    */
+    // Fork child processes for each command.
     pid_t *child_pids = malloc(sizeof(pid_t) * num_cmds);
     if (child_pids == NULL) {
         perror("malloc for child_pids failed");
@@ -156,8 +140,7 @@ int run_pipelined_commands(strvec_t *tokens) {
         pid_t pid = fork();
         if (pid < 0) {
             perror("fork failed");
-            /* Cleanup: close any remaining pipes, free memory, and exit with error.
-                Note: In a robust solution, you might also wait for already launched children. */
+            // Cleaning up
             if (pipefds) {
                 for (int j = 0; j < total_pipe_fds; j++) {
                     close(pipefds[j]);
@@ -171,30 +154,26 @@ int run_pipelined_commands(strvec_t *tokens) {
             free(child_pids);
             return -1;
         } else if (pid == 0) {
-            /* In the child process, set up the appropriate pipe redirections. */
+            // In the child process, I need to set up the appropriate pipe redirections.
             int in_idx = -1, out_idx = -1;
             if (i != 0) {
-                /* Not the first command: redirect STDIN from previous pipe’s read end.
-                    For command i, use pipe number i-1’s read end: index = (i-1)*2 */
+                // redirecting STDIN from previous pipe’s read end, Not the first command.
                 in_idx = (i - 1) * 2;
             }
             if (i != num_cmds - 1) {
-                /* Not the last command: redirect STDOUT to current pipe’s write end.
-                    For command i, use pipe number i’s write end: index = (i * 2) + 1 */
+                // Not the last command: redirecting STDOUT to current pipe’s write end.
                 out_idx = i * 2 + 1;
             }
-            /* Call helper to perform redirection and execute the command.
-                This call should not return on success. */
+            // Calling helper to perform redirection and execute the command.
             run_piped_command(&commands[i], pipefds, total_pipe_fds, in_idx, out_idx);
             exit(EXIT_FAILURE); // just in case run_piped_command returns
         } else {
-            /* In the parent, record the child process ID. */
+            // In the parent, I need to record the child process ID.
             child_pids[i] = pid;
         }
     }
 
-    /* Parent: all children have been forked.
-        Close all pipe file descriptors in the parent to avoid leaks. */
+    // I am closing all pipe fds in the parent to avoid leaks.
     if (pipefds) {
         for (int i = 0; i < total_pipe_fds; i++) {
             close(pipefds[i]);
@@ -202,7 +181,7 @@ int run_pipelined_commands(strvec_t *tokens) {
         free(pipefds);
     }
 
-    /* Wait for all child processes to complete */
+    // Waiting for all child processes to complete
     int status;
     int ret = 0;
     for (int i = 0; i < num_cmds; i++) {
@@ -213,7 +192,7 @@ int run_pipelined_commands(strvec_t *tokens) {
     }
     free(child_pids);
 
-    /* Clean up the memory used by the command token vectors */
+    // Cleaning up the memory used by the command token vectors
     for (int i = 0; i < num_cmds; i++) {
         strvec_clear(&commands[i]);
     }
