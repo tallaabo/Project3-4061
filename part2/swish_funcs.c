@@ -26,8 +26,7 @@
  * Returns 0 on success or -1 on error.
  */
 int run_piped_command(strvec_t *tokens, int *pipes, int n_pipes, int in_idx, int out_idx) {
-
-    //need to redirect standard input from pipe
+    // need to redirect standard input from pipe
     if (in_idx != -1) {
         if (dup2(pipes[in_idx], STDIN_FILENO) == -1) {
             perror("dup2 input failed");
@@ -35,7 +34,7 @@ int run_piped_command(strvec_t *tokens, int *pipes, int n_pipes, int in_idx, int
         }
     }
 
-    //redirecting standard output to pipe
+    // redirecting standard output to pipe
     if (out_idx != -1) {
         if (dup2(pipes[out_idx], STDOUT_FILENO) == -1) {
             perror("dup2 output failed");
@@ -43,18 +42,18 @@ int run_piped_command(strvec_t *tokens, int *pipes, int n_pipes, int in_idx, int
         }
     }
 
-    //I need to close all pipe fds
+    // I need to close all pipe fds
     for (int i = 0; i < n_pipes; i++) {
         close(pipes[i]);
     }
 
-    //executing run command
+    // executing run command
     if (run_command(tokens) == -1) {
         perror("run_command failed");
         exit(EXIT_FAILURE);
     }
 
-    //it shouldn't reach here if successfull
+    // it shouldn't reach here if successfull
     exit(EXIT_FAILURE);
     return -1;
 }
@@ -92,7 +91,9 @@ int run_pipelined_commands(strvec_t *tokens) {
     strvec_t *commands = malloc(sizeof(strvec_t) * num_cmds);
     if (commands == NULL) {
         perror("malloc for commands failed");
-        if (pipefds) free(pipefds);
+        if (pipefds) {
+            free(pipefds);
+        }
         return -1;
     }
 
@@ -106,7 +107,9 @@ int run_pipelined_commands(strvec_t *tokens) {
                     strvec_clear(&commands[k]);
                 }
                 free(commands);
-                if (pipefds) free(pipefds);
+                if (pipefds) {
+                    free(pipefds);
+                }
                 return -1;
             }
             cmd_index++;
@@ -120,7 +123,9 @@ int run_pipelined_commands(strvec_t *tokens) {
             strvec_clear(&commands[k]);
         }
         free(commands);
-        if (pipefds) free(pipefds);
+        if (pipefds) {
+            free(pipefds);
+        }
         return -1;
     }
 
@@ -132,7 +137,9 @@ int run_pipelined_commands(strvec_t *tokens) {
             strvec_clear(&commands[k]);
         }
         free(commands);
-        if (pipefds) free(pipefds);
+        if (pipefds) {
+            free(pipefds);
+        }
         return -1;
     }
 
@@ -166,7 +173,7 @@ int run_pipelined_commands(strvec_t *tokens) {
             }
             // Calling helper to perform redirection and execute the command.
             run_piped_command(&commands[i], pipefds, total_pipe_fds, in_idx, out_idx);
-            exit(EXIT_FAILURE); // just in case run_piped_command returns
+            exit(EXIT_FAILURE);    // just in case run_piped_command returns
         } else {
             // In the parent, I need to record the child process ID.
             child_pids[i] = pid;

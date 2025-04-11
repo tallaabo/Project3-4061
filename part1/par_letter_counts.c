@@ -19,19 +19,24 @@
  */
 int count_letters(const char *file_name, int *counts) {
     FILE *file = fopen(file_name, "r");
-    if (!file) {
+    if (file == NULL) {
         perror("fopen");
         return -1;
     }
 
-    int c;
-    while ((c = fgetc(file)) != EOF) {
-        if (isalpha(c)) {
-            counts[tolower(c) - 'a']++;
+    int ch;
+    while ((ch = fgetc(file)) != EOF) {
+        if (isalpha(ch)) {
+            ch = tolower(ch);
+            int index = ch - 'a';
+            counts[index]++;
         }
     }
 
-    fclose(file);
+    if (fclose(file) == EOF) {
+        perror("fclose");
+        return -1;
+    }
     return 0;
 }
 
@@ -44,65 +49,94 @@ int count_letters(const char *file_name, int *counts) {
  * Returns 0 on success or -1 on error
  */
 int process_file(const char *file_name, int out_fd) {
-    int counts[ALPHABET_LEN] = {0};
-    if (count_letters(file_name, counts) == -1)
+    if (file_name == NULL || out_fd < 0) {
+        fprintf(stderr, "bad input, try again");
         return -1;
+    }
 
-    if (write(out_fd, counts, sizeof(counts)) != sizeof(counts))
+    int counts[ALPHABET_LEN] = {0};
+
+    if (count_letters(file_name, counts) == -1) {
         return -1;
+    }
+
+    ssize_t n = write(out_fd, counts, sizeof(counts));
+    if (n != sizeof(counts)) {
+        perror("pipe write failed");
+        return -1;
+    }
+
     return 0;
 }
 
 int main(int argc, char **argv) {
-    if (argc == 1) {
-        // No files to consume, return immediately
+    if (argc < 2) {
+        // no input files
         return 0;
     }
 
-    int num_files = argc - 1;
+    int file_count = argc - 1;
     int pipe_fds[2];
     if (pipe(pipe_fds) == -1) {
         perror("pipe");
         return 1;
     }
 
-    pid_t pids[num_files];
-    for (int i = 1; i <= num_files; i++) {
+    pid_t pids[file_count];
+
+    for (int i = 0; i < file_count; i++) {
         pid_t pid = fork();
+
         if (pid == -1) {
             perror("fork");
             return 1;
         } else if (pid == 0) {
+            // child process
             close(pipe_fds[0]);
-            if (process_file(argv[i], pipe_fds[1]) == -1) {
-                // Let count_letters print fopen error, just exit silently
+
+            if (process_file(argv[i + 1], pipe_fds[1]) == -1) {
+                close(pipe_fds[1]);
                 exit(1);
             }
+
+            close(pipe_fds[1]);
             exit(0);
         }
-        pids[i - 1] = pid;
+
+        // parent process
+        pids[i] = pid;
     }
 
     close(pipe_fds[1]);
 
     int total_counts[ALPHABET_LEN] = {0};
-    for (int i = 0; i < num_files; i++) {
+
+    for (int i = 0; i < file_count; i++) {
         int status;
-        waitpid(pids[i], &status, 0);
-        if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
-            int temp_counts[ALPHABET_LEN];
-            if (read(pipe_fds[0], temp_counts, sizeof(temp_counts)) != sizeof(temp_counts)) {
+        if (waitpid(pids[i], &status, 0) == -1) {
+            perror("waitpid");
+
+        } else if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
+            int temp[ALPHABET_LEN] = {0};
+            ssize_t pipe_read = read(pipe_fds[0], temp, sizeof(temp));
+
+            if (pipe_read == sizeof(temp)) {
+                for (int j = 0; j < ALPHABET_LEN; j++) {
+                    total_counts[j] += temp[j];
+                }
+            } else {
                 perror("read");
-                return 1;
-            }
-            for (int j = 0; j < ALPHABET_LEN; j++) {
-                total_counts[j] += temp_counts[j];
             }
         }
+    }
+
+    if (close(pipe_fds[0]) == -1) {
+        perror("close pipe read end");
     }
 
     for (int i = 0; i < ALPHABET_LEN; i++) {
         printf("%c Count: %d\n", 'a' + i, total_counts[i]);
     }
+
     return 0;
 }
